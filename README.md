@@ -5,6 +5,12 @@
 
 #### Ejercicio – programación concurrente, condiciones de carrera y sincronización de hilos. EJERCICIO INDIVIDUAL O EN PAREJAS.
 
+### Resuelto por:
+- Francisco Marquez Bocanegra
+- Brayan Camilo Castiblanco
+
+#### Nota: Algunas respuestas estan en el archivo Lab3.docx
+
 ##### Parte I – Antes de terminar la clase.
 
 Control de hilos con wait/notify. Productor/consumidor.

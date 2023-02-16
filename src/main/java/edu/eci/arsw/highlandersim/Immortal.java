@@ -2,13 +2,16 @@ package edu.eci.arsw.highlandersim;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Immortal extends Thread {
 
     private ImmortalUpdateReportCallback updateCallback=null;
-    
-    private int health;
-    
+
+    // $
+    // private int health;
+    private AtomicInteger health;
+
     private int defaultDamageValue;
 
     private final List<Immortal> immortalsPopulation;
@@ -17,14 +20,19 @@ public class Immortal extends Thread {
 
     private final Random r = new Random(System.currentTimeMillis());
 
+    private Object lock;
 
-    public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
+
+    public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb, Object lock) {
         super(name);
         this.updateCallback=ucb;
         this.name = name;
         this.immortalsPopulation = immortalsPopulation;
-        this.health = health;
+        // $
+        // this.health = health;
+        this.health = new AtomicInteger(health);
         this.defaultDamageValue=defaultDamageValue;
+        this.lock = lock;
     }
 
     public void run() {
@@ -59,7 +67,9 @@ public class Immortal extends Thread {
 
         if (i2.getHealth() > 0) {
             i2.changeHealth(i2.getHealth() - defaultDamageValue);
-            this.health += defaultDamageValue;
+            // $
+            // this.health += defaultDamageValue;
+            this.health.addAndGet(defaultDamageValue);
             updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
         } else {
             updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
@@ -67,18 +77,30 @@ public class Immortal extends Thread {
 
     }
 
-    public void changeHealth(int v) {
+    // $
+    /*public void changeHealth(int v) {
         health = v;
+    }*/
+    public void changeHealth(int v) {
+        health.set(v);
     }
 
     public int getHealth() {
-        return health;
+        return health.get();
     }
 
     @Override
     public String toString() {
 
         return name + "[" + health + "]";
+    }
+
+    public void pauseImmortal(){
+        try {
+            this.lock.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
