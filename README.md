@@ -9,7 +9,7 @@
 - Francisco Marquez Bocanegra
 - Brayan Camilo Castiblanco
 
-#### Nota: Algunas respuestas estan en el archivo Lab3.docx
+#### Nota: Algunas respuestas estan en el archivo Lab3.docx y otras ya en el código  
 
 ##### Parte I – Antes de terminar la clase.
 
